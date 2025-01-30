@@ -1,5 +1,6 @@
 package com.spring.abrsh.photoz_clone;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +22,12 @@ import jakarta.validation.Valid;
 
 @RestController
 public class PhotozController {
-    private Map<String, Photo> db = new HashMap<>() {
-        {
-            put("1", new Photo("1", "photo1.jpg"));
-            put("2", new Photo("2", "photo2.jpg"));
-        }
-    };
+
+    private final PhotosService photosService;
+
+    public PhotozController(PhotosService photosService) {
+        this.photosService = photosService;
+    }
 
     @GetMapping("/")
     public String hello() {
@@ -35,39 +36,32 @@ public class PhotozController {
 
     @GetMapping("/photos")
     public Collection<Photo> get() {
-        return db.values();
+        return photosService.get();
     }
 
     @GetMapping("/photos/{id}")
     public Photo getOne(@PathVariable String id) {
-        Photo photo = db.get(id);
+        Photo photo = photosService.get(id);
         if (photo == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Photo not found");
         }
-        return db.get(id);
+        return photosService.get(id);
     }
 
     @DeleteMapping("/photos/{id}")
     public void delete(@PathVariable String id) {
-        if (db.remove(id) == null) {
+        if (photosService.remove(id) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Photo not found");
         }
     }
 
     @PostMapping("/photos")
     public Photo create(@RequestPart("data") MultipartFile file) {
-
-        Photo photo = new Photo();
-
-        photo.setId(UUID.randomUUID().toString());
-        photo.setFileName(file.getOriginalFilename());
         try {
-            photo.setData(file.getBytes());
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving photo");
+            Photo photo = photosService.save(file.getOriginalFilename(), file.getBytes());
+            return photo;
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not save photo", e);
         }
-
-        db.put(photo.getId(), photo);
-        return photo;
-    } 
+    }
 }
