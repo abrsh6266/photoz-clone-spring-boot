@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
@@ -53,9 +55,19 @@ public class PhotozController {
     }
 
     @PostMapping("/photos")
-    public Photo create(@RequestBody @Valid Photo photo) {
+    public Photo create(@RequestPart("data") MultipartFile file) {
+
+        Photo photo = new Photo();
+
         photo.setId(UUID.randomUUID().toString());
+        photo.setFileName(file.getOriginalFilename());
+        try {
+            photo.setData(file.getBytes());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving photo");
+        }
+
         db.put(photo.getId(), photo);
         return photo;
-    }
+    } 
 }
