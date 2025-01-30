@@ -1,4 +1,4 @@
-package com.spring.abrsh.photoz_clone;
+package com.spring.abrsh.photoz_clone.service;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-//@Component
+import com.spring.abrsh.photoz_clone.model.Photo;
+
 @Service
 public class PhotosService {
     private Map<String, Photo> db = new HashMap<>() {

@@ -1,4 +1,4 @@
-package com.spring.abrsh.photoz_clone;
+package com.spring.abrsh.photoz_clone.web;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.spring.abrsh.photoz_clone.model.Photo;
+import com.spring.abrsh.photoz_clone.service.PhotosService;
 
 @RestController
 public class DownloadController {

@@ -1,4 +1,4 @@
-package com.spring.abrsh.photoz_clone;
+package com.spring.abrsh.photoz_clone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
