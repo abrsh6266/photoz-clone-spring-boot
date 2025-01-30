@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class PhotozController {
     private Map<String, Photo> db = new HashMap<>() {
@@ -51,7 +53,7 @@ public class PhotozController {
     }
 
     @PostMapping("/photos")
-    public Photo create(@RequestBody Photo photo) {
+    public Photo create(@RequestBody @Valid Photo photo) {
         photo.setId(UUID.randomUUID().toString());
         db.put(photo.getId(), photo);
         return photo;
