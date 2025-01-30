@@ -58,7 +58,7 @@ public class PhotozController {
     @PostMapping("/photos")
     public Photo create(@RequestPart("data") MultipartFile file) {
         try {
-            Photo photo = photosService.save(file.getOriginalFilename(), file.getBytes());
+            Photo photo = photosService.save(file.getOriginalFilename(), file.getContentType(), file.getBytes());
             return photo;
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not save photo", e);
